@@ -1,0 +1,144 @@
+from fastapi import FastAPI, HTTPException, Response
+from fastapi import Cookie, Header
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import event
+from sqlalchemy.orm import Session
+from sqlalchemy.engine import Engine
+from database import Base, UserTable, ContentTable, engine
+from model import *
+from util import create_jwt, get_user_id_from_token, password_context
+import secrets
+
+
+app = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
+
+Base.metadata.create_all(engine)
+
+
+@app.get("/")
+def root():
+    return "hello world"
+
+
+@app.post("/signup/", response_model=User)
+def user_signup(signup: UserAuth, response: Response):
+    with Session(engine) as db:
+        db_user = db.query(UserTable).filter_by(email=signup.email).first()
+        if db_user is None:
+            pass
+        else:
+            raise HTTPException(status_code=404, detail="error: user_signup")
+
+        hashed_password = password_context.hash(signup.password)
+        user = UserTable(email=signup.email, hashed_password=hashed_password)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    encoded_jwt = create_jwt(user)
+    response.set_cookie(key="access_token", value=encoded_jwt, httponly=True)
+    response.set_cookie(key="xsrf_token", value=secrets.token_hex(16))
+    return user
+
+
+@app.post("/login/", response_model=User)
+def user_login(login: UserAuth, response: Response):
+    with Session(engine) as db:
+        db_user = db.query(UserTable).filter_by(email=login.email).one()
+
+    if not password_context.verify(login.password, db_user.hashed_password):
+        raise HTTPException(status_code=404, detail="error: user_login")
+
+    encoded_jwt = create_jwt(db_user)
+    response.set_cookie(key="access_token", value=encoded_jwt, httponly=True)
+    response.set_cookie(key="xsrf_token", value=secrets.token_hex(16))
+    return db_user
+
+
+@app.get("/user/", response_model=User)
+def get_current_user(access_token: str | None = Cookie(default=None)):
+    with Session(engine) as db:
+        user_id = get_user_id_from_token(access_token)
+        db_user = db.query(UserTable).filter_by(id=user_id).one()
+    return db_user
+
+
+@app.get("/content/", response_model=list[Content])
+def get_contents(access_token: str | None = Cookie(default=None)):
+    with Session(engine) as db:
+        user_id = get_user_id_from_token(access_token)
+        db_contents = db.query(ContentTable).filter_by(user_id=user_id).all()
+
+    return db_contents
+
+
+@app.post("/content/", response_model=Content)
+def create_content(access_token: str | None = Cookie(default=None)):
+    with Session(engine) as db:
+        user_id = get_user_id_from_token(access_token)
+        db_user = db.query(UserTable).filter_by(id=user_id).one()
+        content = ContentTable(user_id=user_id, title="無題", content="")
+        db.add(content)
+        db.commit()
+        db.refresh(content)
+
+    return content
+
+
+@app.put("/content/", response_model=Content)
+def update_content(
+    update_content: UpdateContent, access_token: str | None = Cookie(default=None)
+):
+    with Session(engine) as db:
+        user_id = get_user_id_from_token(access_token)
+        db_user = db.query(UserTable).filter_by(id=user_id).one()
+        db_content = db.query(ContentTable).filter_by(id=update_content.id).one()
+
+        if not db_user.id == db_content.user_id:
+            raise HTTPException(status_code=404, detail="error: update_content")
+
+        if update_content.title:
+            db_content.title = update_content.title
+
+        if update_content.content:
+            db_content.content = update_content.content
+
+        db.commit()
+        db.refresh(db_content)
+
+    return db_content
+
+
+@app.delete("/content/{content_id}", response_model=Content)
+def delete_content(content_id: int, access_token: str | None = Cookie(default=None)):
+    with Session(engine) as db:
+        user_id = get_user_id_from_token(access_token)
+        db_user = db.query(UserTable).filter_by(id=user_id).one()
+        db_content = db.query(ContentTable).filter_by(id=content_id).one()
+
+        if not db_user.id == db_content.user_id:
+            raise HTTPException(status_code=404, detail="error: delete_content")
+
+        db.delete(db_content)
+        db.commit()
+
+    return db_content

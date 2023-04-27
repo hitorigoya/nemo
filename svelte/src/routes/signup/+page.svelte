@@ -1,0 +1,152 @@
+<script>
+    import axios from "axios";
+    import validator from "validator";
+
+    let email = "";
+    let password = "";
+    let emailFormWarn = false;
+    let passwordFormWarn = false;
+    let displayLoginErrorMsg = false;
+
+    function validateEmail() {
+        if (validator.isEmail(email)) {
+            emailFormWarn = false;
+        } else {
+            emailFormWarn = true;
+        }
+    }
+    function validatePassword() {
+        if (
+            validator.isLength(password, { min: 8, max: undefined }) &&
+            validator.isAlphanumeric(password)
+        ) {
+            passwordFormWarn = false;
+        } else {
+            passwordFormWarn = true;
+        }
+    }
+    async function handleSubmit() {
+        console.log(email);
+        console.log(password);
+
+        if (
+            validator.isEmail(email) &&
+            validator.isLength(password, { min: 8, max: undefined }) &&
+            validator.isAlphanumeric(password)
+        ) {
+            try {
+                const res = await axios.post("http://127.0.0.1:8000/signup/", {
+                    email: email,
+                    password: password,
+                });
+                window.location.replace("/");
+            } catch (err) {
+                if (err.response.status === 404) {
+                    displayLoginErrorMsg = true;
+                }
+            }
+        } else {
+            return;
+        }
+    }
+</script>
+
+<div class="form_container">
+    <h2>サインアップ</h2>
+    <div class="signup">未登録の場合は<a href="/login/">ログイン</a></div>
+    <form on:submit|preventDefault={handleSubmit}>
+        <label
+            ><span class="title">メールアドレス</span>
+            <input
+                bind:value={email}
+                on:input={validateEmail}
+                class:validator_warn={emailFormWarn === true}
+            />
+        </label>
+        <label
+            ><span class="title">パスワード（半角英数字8文字以上）</span>
+            <input
+                bind:value={password}
+                on:input={validatePassword}
+                type="password"
+                class:validator_warn={passwordFormWarn === true}
+            />
+        </label>
+        <button>サインアップ</button>
+        <div
+            class="login_error_msg"
+            class:visible={displayLoginErrorMsg === true}
+        >
+            このメールアドレスはすでに登録されています
+        </div>
+    </form>
+</div>
+
+<style>
+    .form_container {
+        max-width: 520px;
+        margin: 32px auto;
+        background-color: #313133;
+        border-radius: 8px;
+        padding: 32px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 4px;
+    }
+    .signup {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+    .signup a {
+        font-weight: bold;
+    }
+    .title {
+        display: inline-block;
+        font-size: 14px;
+        color: #bfbfbf;
+        margin-bottom: 4px;
+    }
+    input {
+        font-size: 16px;
+        background-color: #313133;
+        color: var(--text-color-primary);
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #bfbfbf;
+        border-radius: 4px;
+        margin-bottom: 16px;
+    }
+    input:focus {
+        outline: none;
+    }
+    button {
+        font-size: 14px;
+        text-align: center;
+        background-color: #1473e6;
+        color: #fff;
+        width: 100%;
+        padding: 12px 16px;
+        margin-top: 16px;
+        border: none;
+        border-radius: 4px;
+    }
+    button:hover {
+        cursor: pointer;
+    }
+    .validator_warn {
+        border-color: tomato;
+    }
+    .login_error_msg {
+        display: none;
+        color: tomato;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 16px;
+    }
+    .visible {
+        display: block;
+    }
+</style>
