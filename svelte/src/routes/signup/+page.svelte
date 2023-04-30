@@ -35,7 +35,7 @@
             validator.isAlphanumeric(password)
         ) {
             try {
-                const res = await axios.post("http://127.0.0.1:8000/signup/", {
+                const res = await axios.post("/api/signup/", {
                     email: email,
                     password: password,
                 });

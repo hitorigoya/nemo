@@ -1,7 +1,9 @@
 :root {
     color-scheme: dark;
     --text-color-primary: #D4D4D4;
-    --bg-color-primary: #252526;
+    --text-color-secondary: #A6A6A6;
+    --bg-color-primary: #1E1E1E;
+    --bg-color-secondary: #252526;
 }
 
 * {

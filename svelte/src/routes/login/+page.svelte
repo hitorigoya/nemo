@@ -35,18 +35,16 @@
             validator.isAlphanumeric(password)
         ) {
             try {
-                const res = await axios.post("http://127.0.0.1:8000/login/", {
+                const res = await axios.post("/api/login/", {
                     email: email,
                     password: password,
                 });
                 console.log(res);
-                // if (res.status === 200) {
-                //     window.location.replace("/");
-                // }
-            } catch (err) {
-                if (err.response.status === 404) {
-                    displayLoginErrorMsg = true;
+                if (res.status === 200) {
+                    window.location.replace("/");
                 }
+            } catch (err) {
+                displayLoginErrorMsg = true;
             }
         } else {
             return;
@@ -89,7 +87,7 @@
     .form_container {
         max-width: 520px;
         margin: 32px auto;
-        background-color: #313133;
+        background-color: var(--bg-color-secondary);
         border-radius: 8px;
         padding: 32px;
     }
@@ -113,7 +111,7 @@
     }
     input {
         font-size: 16px;
-        background-color: #313133;
+        background-color: var(--bg-color-secondary);
         color: var(--text-color-primary);
         display: block;
         width: 100%;

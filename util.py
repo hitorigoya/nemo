@@ -9,7 +9,7 @@ password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = "59bceb84c6ed47eeb7b37fbaa67059c1c8daa0cac3ef0e47daf0543425fc1f4f"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 
 def get_user_id_from_token(access_token):

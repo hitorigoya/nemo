@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Response
 from fastapi import Cookie, Header
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
@@ -11,17 +11,10 @@ import secrets
 
 
 app = FastAPI()
-origins = [
-    "http://localhost",
-    "http://localhost:5173",
-]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+api = FastAPI(title="api")
+web = StaticFiles(directory="svelte/build", html=True)
+app.mount("/api", api)
+app.mount("/", web)
 
 
 @event.listens_for(Engine, "connect")
@@ -34,12 +27,12 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 Base.metadata.create_all(engine)
 
 
-@app.get("/")
+@api.get("/")
 def root():
     return "hello world"
 
 
-@app.post("/signup/", response_model=User)
+@api.post("/signup/", response_model=User)
 def user_signup(signup: UserAuth, response: Response):
     with Session(engine) as db:
         db_user = db.query(UserTable).filter_by(email=signup.email).first()
@@ -60,7 +53,7 @@ def user_signup(signup: UserAuth, response: Response):
     return user
 
 
-@app.post("/login/", response_model=User)
+@api.post("/login/", response_model=User)
 def user_login(login: UserAuth, response: Response):
     with Session(engine) as db:
         db_user = db.query(UserTable).filter_by(email=login.email).one()
@@ -74,7 +67,7 @@ def user_login(login: UserAuth, response: Response):
     return db_user
 
 
-@app.get("/user/", response_model=User)
+@api.get("/user/", response_model=User)
 def get_current_user(access_token: str | None = Cookie(default=None)):
     with Session(engine) as db:
         user_id = get_user_id_from_token(access_token)
@@ -82,7 +75,7 @@ def get_current_user(access_token: str | None = Cookie(default=None)):
     return db_user
 
 
-@app.get("/content/", response_model=list[Content])
+@api.get("/content/", response_model=list[Content])
 def get_contents(access_token: str | None = Cookie(default=None)):
     with Session(engine) as db:
         user_id = get_user_id_from_token(access_token)
@@ -91,7 +84,7 @@ def get_contents(access_token: str | None = Cookie(default=None)):
     return db_contents
 
 
-@app.post("/content/", response_model=Content)
+@api.post("/content/", response_model=Content)
 def create_content(access_token: str | None = Cookie(default=None)):
     with Session(engine) as db:
         user_id = get_user_id_from_token(access_token)
@@ -104,7 +97,7 @@ def create_content(access_token: str | None = Cookie(default=None)):
     return content
 
 
-@app.put("/content/", response_model=Content)
+@api.put("/content/", response_model=Content)
 def update_content(
     update_content: UpdateContent, access_token: str | None = Cookie(default=None)
 ):
@@ -128,7 +121,7 @@ def update_content(
     return db_content
 
 
-@app.delete("/content/{content_id}", response_model=Content)
+@api.delete("/content/{content_id}", response_model=Content)
 def delete_content(content_id: int, access_token: str | None = Cookie(default=None)):
     with Session(engine) as db:
         user_id = get_user_id_from_token(access_token)
