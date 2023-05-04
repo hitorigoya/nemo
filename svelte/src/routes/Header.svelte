@@ -1,11 +1,11 @@
 <script>
     import { onMount } from "svelte";
-    import axios from "axios";
+    import { request } from "./util.js";
 
     let email = "";
     onMount(async () => {
         try {
-            const res = await axios.get("/api/user/");
+            const res = await request.get("/api/user/");
             email = res.data.email;
         } catch (err) {
             console.log(err);
@@ -30,7 +30,7 @@
         height: 64px;
         position: sticky;
         top: 0;
-        background-color: var(--bg-color-secondary);
         font-size: 14px;
+        background-color: var(--bg-color-secondary);
     }
 </style>

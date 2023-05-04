@@ -26,3 +26,13 @@ def create_jwt(user: UserTable):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {"sub": str(user.id), "exp": expire}
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
+def check_xsrf_tokens(xsrf_token, x_xsrf_token):
+    if xsrf_token is None:
+        return False
+
+    if xsrf_token == x_xsrf_token:
+        return True
+    else:
+        return False

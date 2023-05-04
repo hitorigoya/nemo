@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException, Response
-from fastapi import Cookie, Header
+from fastapi import Depends, Cookie, Header
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
 from database import Base, UserTable, ContentTable, engine
 from model import *
-from util import create_jwt, get_user_id_from_token, password_context
+from util import create_jwt, get_user_id_from_token, check_xsrf_tokens, password_context
 import secrets
 
 
@@ -25,6 +25,18 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 
 Base.metadata.create_all(engine)
+
+
+class Tokens:
+    def __init__(
+        self,
+        access_token: str | None = Cookie(default=None),
+        xsrf_token: str | None = Cookie(default=None),
+        x_xsrf_token: str | None = Header(default=None),
+    ):
+        self.access = access_token
+        self.xsrf = xsrf_token
+        self.x_xsrf = x_xsrf_token
 
 
 @api.get("/")
@@ -68,26 +80,35 @@ def user_login(login: UserAuth, response: Response):
 
 
 @api.get("/user/", response_model=User)
-def get_current_user(access_token: str | None = Cookie(default=None)):
+def get_current_user(tokens: Tokens = Depends()):
+    if not check_xsrf_tokens(tokens.xsrf, tokens.x_xsrf):
+        raise HTTPException(status_code=404)
+
     with Session(engine) as db:
-        user_id = get_user_id_from_token(access_token)
+        user_id = get_user_id_from_token(tokens.access)
         db_user = db.query(UserTable).filter_by(id=user_id).one()
     return db_user
 
 
 @api.get("/content/", response_model=list[Content])
-def get_contents(access_token: str | None = Cookie(default=None)):
+def get_contents(tokens: Tokens = Depends()):
+    if not check_xsrf_tokens(tokens.xsrf, tokens.x_xsrf):
+        raise HTTPException(status_code=404)
+
     with Session(engine) as db:
-        user_id = get_user_id_from_token(access_token)
+        user_id = get_user_id_from_token(tokens.access)
         db_contents = db.query(ContentTable).filter_by(user_id=user_id).all()
 
     return db_contents
 
 
 @api.post("/content/", response_model=Content)
-def create_content(access_token: str | None = Cookie(default=None)):
+def create_content(tokens: Tokens = Depends()):
+    if not check_xsrf_tokens(tokens.xsrf, tokens.x_xsrf):
+        raise HTTPException(status_code=404)
+
     with Session(engine) as db:
-        user_id = get_user_id_from_token(access_token)
+        user_id = get_user_id_from_token(tokens.access)
         db_user = db.query(UserTable).filter_by(id=user_id).one()
         content = ContentTable(user_id=user_id, title="無題", content="")
         db.add(content)
@@ -98,16 +119,17 @@ def create_content(access_token: str | None = Cookie(default=None)):
 
 
 @api.put("/content/", response_model=Content)
-def update_content(
-    update_content: UpdateContent, access_token: str | None = Cookie(default=None)
-):
+def update_content(update_content: UpdateContent, tokens: Tokens = Depends()):
+    if not check_xsrf_tokens(tokens.xsrf, tokens.x_xsrf):
+        raise HTTPException(status_code=404)
+
     with Session(engine) as db:
-        user_id = get_user_id_from_token(access_token)
+        user_id = get_user_id_from_token(tokens.access)
         db_user = db.query(UserTable).filter_by(id=user_id).one()
         db_content = db.query(ContentTable).filter_by(id=update_content.id).one()
 
         if not db_user.id == db_content.user_id:
-            raise HTTPException(status_code=404, detail="error: update_content")
+            raise HTTPException(status_code=404)
 
         if update_content.title:
             db_content.title = update_content.title
@@ -122,14 +144,17 @@ def update_content(
 
 
 @api.delete("/content/{content_id}", response_model=Content)
-def delete_content(content_id: int, access_token: str | None = Cookie(default=None)):
+def delete_content(content_id: int, tokens: Tokens = Depends()):
+    if not check_xsrf_tokens(tokens.xsrf, tokens.x_xsrf):
+        raise HTTPException(status_code=404)
+
     with Session(engine) as db:
-        user_id = get_user_id_from_token(access_token)
+        user_id = get_user_id_from_token(tokens.access)
         db_user = db.query(UserTable).filter_by(id=user_id).one()
         db_content = db.query(ContentTable).filter_by(id=content_id).one()
 
         if not db_user.id == db_content.user_id:
-            raise HTTPException(status_code=404, detail="error: delete_content")
+            raise HTTPException(status_code=404)
 
         db.delete(db_content)
         db.commit()
