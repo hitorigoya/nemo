@@ -1,11 +1,11 @@
 <script>
+    import axios from "axios";
     import { onMount } from "svelte";
-    import { request } from "./util.js";
 
     let email = "";
     onMount(async () => {
         try {
-            const res = await request.get("/api/user/");
+            const res = await axios.get("/api/user/");
             email = res.data.email;
         } catch (err) {
             console.log(err);

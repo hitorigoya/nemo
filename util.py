@@ -17,7 +17,7 @@ def get_user_id_from_token(access_token):
         payload = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("sub")
     except JWTError:
-        raise HTTPException(status_code=404, detail="get_user_id_from_token")
+        raise HTTPException(status_code=404)
 
     return user_id
 
@@ -26,13 +26,3 @@ def create_jwt(user: UserTable):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {"sub": str(user.id), "exp": expire}
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-
-def check_xsrf_tokens(xsrf_token, x_xsrf_token):
-    if xsrf_token is None:
-        return False
-
-    if xsrf_token == x_xsrf_token:
-        return True
-    else:
-        return False

@@ -1,10 +1,10 @@
 <script>
-    import { request } from "./util.js";
+    import axios from "axios";
     import { contents, currentContentID } from "./store.js";
 
     async function getContents() {
         try {
-            const res = await request.get("/api/content/");
+            const res = await axios.get("/api/content/");
             $contents = res.data;
             console.log(res.data);
         } catch (err) {
@@ -14,7 +14,7 @@
 
     async function createContent() {
         try {
-            const res = await request.post("/api/content");
+            const res = await axios.post("/api/content");
             console.log(res.data);
             getContents();
         } catch (err) {
@@ -29,7 +29,7 @@
         if (index === -1) return;
 
         try {
-            const res = await request.delete(
+            const res = await axios.delete(
                 `/api/content/${$contents[index].id}`
             );
             console.log(res.data);
@@ -81,7 +81,6 @@
         cursor: pointer;
         background-color: #313131;
     }
-
     ul li:last-of-type {
         font-size: 12px;
     }

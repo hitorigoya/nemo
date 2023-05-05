@@ -4,15 +4,15 @@
 
     let email = "";
     let password = "";
-    let emailFormWarn = false;
-    let passwordFormWarn = false;
+    let emailWarn = false;
+    let passwordWarn = false;
     let displayLoginErrorMsg = false;
 
     function validateEmail() {
         if (validator.isEmail(email)) {
-            emailFormWarn = false;
+            emailWarn = false;
         } else {
-            emailFormWarn = true;
+            emailWarn = true;
         }
     }
     function validatePassword() {
@@ -20,34 +20,26 @@
             validator.isLength(password, { min: 8, max: undefined }) &&
             validator.isAlphanumeric(password)
         ) {
-            passwordFormWarn = false;
+            passwordWarn = false;
         } else {
-            passwordFormWarn = true;
+            passwordWarn = true;
         }
     }
     async function handleSubmit() {
-        console.log(email);
-        console.log(password);
-
         if (
             validator.isEmail(email) &&
             validator.isLength(password, { min: 8, max: undefined }) &&
             validator.isAlphanumeric(password)
         ) {
             try {
-                const res = await axios.post("/api/login/", {
+                await axios.post("/api/login/", {
                     email: email,
                     password: password,
                 });
-                console.log(res);
-                if (res.status === 200) {
-                    window.location.replace("/");
-                }
+                window.location.replace("/");
             } catch (err) {
                 displayLoginErrorMsg = true;
             }
-        } else {
-            return;
         }
     }
 </script>
@@ -57,27 +49,24 @@
     <div class="signup">未登録の場合は<a href="/signup/">サインアップ</a></div>
     <form on:submit|preventDefault={handleSubmit}>
         <label
-            ><span class="title">メールアドレス</span>
+            ><span class="label_text">メールアドレス</span>
             <input
                 bind:value={email}
                 on:input={validateEmail}
-                class:validator_warn={emailFormWarn === true}
+                class:validator_warn={emailWarn}
             />
         </label>
         <label
-            ><span class="title">パスワード（半角英数字8文字以上）</span>
+            ><span class="label_text">パスワード（半角英数字8文字以上）</span>
             <input
                 bind:value={password}
                 on:input={validatePassword}
                 type="password"
-                class:validator_warn={passwordFormWarn === true}
+                class:validator_warn={passwordWarn}
             />
         </label>
         <button>ログイン</button>
-        <div
-            class="login_error_msg"
-            class:visible={displayLoginErrorMsg === true}
-        >
+        <div class="login_error_msg" class:visible={displayLoginErrorMsg}>
             メールアドレスもしくはパスワードが違います
         </div>
     </form>
@@ -103,7 +92,7 @@
     .signup a {
         font-weight: bold;
     }
-    .title {
+    .label_text {
         display: inline-block;
         font-size: 14px;
         margin-bottom: 4px;

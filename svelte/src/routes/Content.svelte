@@ -1,6 +1,6 @@
 <script>
+    import axios from "axios";
     import { onMount } from "svelte";
-    import { request } from "./util.js";
     import { contents, currentContentID } from "./store.js";
 
     onMount(() => {
@@ -9,7 +9,7 @@
 
     async function getContents() {
         try {
-            const res = await request.get("/api/content/");
+            const res = await axios.get("/api/content/");
             $contents = res.data;
             console.log(res.data);
         } catch (err) {
@@ -18,13 +18,11 @@
     }
 
     async function updateContent() {
-        const index = $contents.findIndex(
-            (obj) => obj.id === $currentContentID
-        );
+        const index = getCurrentIndex();
         if (index === -1) return;
 
         try {
-            const res = await request.put("/api/content", {
+            const res = await axios.put("/api/content", {
                 id: $contents[index].id,
                 title: $contents[index].title,
                 content: $contents[index].content,
@@ -37,9 +35,7 @@
     }
 
     function handleInput() {
-        const index = $contents.findIndex(
-            (obj) => obj.id === $currentContentID
-        );
+        const index = getCurrentIndex();
         if (index === -1) return;
         $contents[index].modified = true;
     }
@@ -52,9 +48,8 @@
     }
 
     function downloadFile() {
-        const index = $contents.findIndex(
-            (obj) => obj.id === $currentContentID
-        );
+        const index = getCurrentIndex();
+        if (index === -1) return;
         const blob = new Blob([$contents[index].content], {
             type: "text/plain",
         });
@@ -64,6 +59,10 @@
         anchor.download = `${$contents[index].title}.txt`;
         anchor.click();
         URL.revokeObjectURL(blobUrl);
+    }
+
+    function getCurrentIndex() {
+        return $contents.findIndex((obj) => obj.id === $currentContentID);
     }
 </script>
 
