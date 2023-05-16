@@ -4,7 +4,9 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
 
 
-engine = create_engine("sqlite:///database.sqlite", echo=True)
+engine = create_engine(
+    "sqlite:///database.sqlite", connect_args={"check_same_thread": False}, echo=True
+)
 
 
 class Base(DeclarativeBase):
