@@ -14,6 +14,7 @@
             console.log(res.data);
         } catch (err) {
             console.log(err);
+            window.location.replace("/login/");
         }
     }
 
