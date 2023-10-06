@@ -96,6 +96,7 @@
     h2 {
         text-align: center;
         margin-bottom: 4px;
+        color: var(--text-content-title);
     }
     .signup {
         text-align: center;
@@ -116,7 +117,7 @@
         display: block;
         width: 100%;
         padding: 12px 16px;
-        border: 1px solid #bfbfbf;
+        border: 1px solid transparent;
         border-radius: 4px;
         margin-bottom: 16px;
         color: var(--text-color-primary);
@@ -170,7 +171,7 @@
             margin: 32px auto;
             border-radius: 8px;
             padding: 32px;
-            background-color: var(--bg-color-secondary);
+            background-color: #2b2d31;
         }
         .help {
             max-width: 520px;

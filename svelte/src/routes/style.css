@@ -1,9 +1,14 @@
 :root {
     color-scheme: dark;
-    --text-color-primary: #D4D4D4;
-    --text-color-secondary: #A6A6A6;
-    --bg-color-primary: #1E1E1E;
-    --bg-color-secondary: #252526;
+    --text-color-primary: #dbdee1;
+    --text-color-secondary: #b5bac1;
+    --bg-color-primary: #313338;
+    --bg-color-secondary: #232428;
+    --bg-contents-list: #2b2d31;
+    --bg-contents-list-highlight: #4e50584d;
+    --text-contents-list: #b5bac1;
+    --text-contents-list-active: #dbdee1;
+    --text-content-title: #f2f3f5;
 }
 
 * {

@@ -38,6 +38,7 @@
         position: sticky;
         top: 0;
         font-size: 14px;
+        color: var(--text-color-secondary);
         background-color: var(--bg-color-secondary);
     }
     #help {
@@ -52,6 +53,8 @@
         border: none;
         padding: 8px 12px;
         border-radius: 50%;
+        color: var(--text-color-primary);
+        background-color: var(--bg-color-primary);
     }
     .help_btn:hover {
         cursor: pointer;

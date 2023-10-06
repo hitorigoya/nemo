@@ -75,21 +75,22 @@
             padding: 0;
             overflow-y: auto;
             overflow-x: hidden;
+            background-color: var(--bg-contents-list);
         }
         ul li {
             font-size: 14px;
             padding: 6px 16px;
             white-space: nowrap;
             position: relative;
-            color: var(--text-color-secondary);
+            color: var(--text-contents-list);
         }
         ul li:hover {
             cursor: pointer;
-            background-color: #313131;
+            background-color: var(--bg-contents-list-highlight);
         }
         .current_content {
-            color: var(--text-color-primary) !important;
-            background-color: #313131;
+            color: var(--text-contents-list-active) !important;
+            background-color: var(--bg-contents-list-highlight);
         }
         .modified::before {
             content: "* ";
