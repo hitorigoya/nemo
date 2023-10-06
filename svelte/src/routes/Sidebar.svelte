@@ -74,10 +74,11 @@
             margin: 0;
             padding: 0;
             overflow-y: auto;
+            overflow-x: hidden;
         }
         ul li {
             font-size: 14px;
-            padding: 4px 16px;
+            padding: 6px 16px;
             white-space: nowrap;
             position: relative;
             color: var(--text-color-secondary);
@@ -85,9 +86,6 @@
         ul li:hover {
             cursor: pointer;
             background-color: #313131;
-        }
-        ul li:last-of-type {
-            font-size: 12px;
         }
         .current_content {
             color: var(--text-color-primary) !important;

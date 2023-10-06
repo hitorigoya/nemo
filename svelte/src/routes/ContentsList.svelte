@@ -44,16 +44,13 @@
         list-style: none;
         margin: 0;
         padding: 0;
-        overflow-y: auto;
+        overflow-x: hidden;
     }
     ul li {
         font-size: 14px;
         padding: 8px 16px;
         white-space: nowrap;
         color: var(--text-color-secondary);
-    }
-    ul li:last-of-type {
-        font-size: 12px;
     }
     .modified::before {
         content: "* ";
