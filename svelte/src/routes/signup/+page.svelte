@@ -46,6 +46,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>サインアップ | Nemo</title>
+</svelte:head>
+
 <div class="form_container">
     <h2>サインアップ</h2>
     <div class="signup">未登録の場合は<a href="/login/">ログイン</a></div>
