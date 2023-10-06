@@ -119,6 +119,7 @@
                 bind:value={content.title}
                 on:input={handleInput}
                 class="title_field"
+                placeholder="タイトルを入力..."
             />
             <textarea
                 bind:value={content.content}
