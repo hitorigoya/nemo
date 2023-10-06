@@ -161,6 +161,7 @@
     .title_field {
         padding: 32px 0;
         font-size: 32px;
+        color: var(--text-content-title);
     }
     .content_field {
         padding-top: 0;
