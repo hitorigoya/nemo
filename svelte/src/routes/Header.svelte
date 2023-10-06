@@ -15,10 +15,6 @@
 
 <header>
     <div>{email}</div>
-    <div>
-        <a href="/login/">ログイン</a>
-        <a href="/signup/">サインアップ</a>
-    </div>
 </header>
 
 <style>

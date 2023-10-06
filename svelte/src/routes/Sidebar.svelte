@@ -57,57 +57,63 @@
         </li>
     {/each}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li on:click={createContent}>+ ページを追加</li>
+    <li on:click={createContent}>+ テキストを追加</li>
 </ul>
 
 <style>
     ul {
-        list-style: none;
-        position: sticky;
-        top: 64px;
-        height: calc(100vh - 64px);
-        margin: 0;
-        padding: 0;
-        overflow-y: auto;
-    }
-    ul li {
-        font-size: 14px;
-        padding: 4px 16px;
-        white-space: nowrap;
-        position: relative;
-        color: var(--text-color-secondary);
-    }
-    ul li:hover {
-        cursor: pointer;
-        background-color: #313131;
-    }
-    ul li:last-of-type {
-        font-size: 12px;
-    }
-    .current_content {
-        color: var(--text-color-primary) !important;
-        background-color: #313131;
-    }
-    .modified::before {
-        content: "* ";
-    }
-    .delete_btn {
         display: none;
-        position: absolute;
-        top: 10%;
-        bottom: 10%;
-        right: 0;
-        padding: 0 4px;
-        border: 1px solid var(--text-color-secondary);
-        border-radius: 4px;
-        color: var(--text-color-secondary);
-        background-color: var(--bg-color-secondary);
     }
-    .delete_btn:hover {
-        color: var(--text-color-primary);
-        border-color: var(--text-color-primary);
-    }
-    .visible {
-        display: block;
+    @media (min-width: 768px) {
+        ul {
+            display: block;
+            list-style: none;
+            position: sticky;
+            top: 64px;
+            height: calc(100vh - 64px);
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+        }
+        ul li {
+            font-size: 14px;
+            padding: 4px 16px;
+            white-space: nowrap;
+            position: relative;
+            color: var(--text-color-secondary);
+        }
+        ul li:hover {
+            cursor: pointer;
+            background-color: #313131;
+        }
+        ul li:last-of-type {
+            font-size: 12px;
+        }
+        .current_content {
+            color: var(--text-color-primary) !important;
+            background-color: #313131;
+        }
+        .modified::before {
+            content: "* ";
+        }
+        .delete_btn {
+            display: none;
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            right: 0;
+            padding: 0 4px;
+            border: 1px solid var(--text-color-secondary);
+            border-radius: 4px;
+            color: var(--text-color-secondary);
+            background-color: var(--bg-color-secondary);
+        }
+        .delete_btn:hover {
+            color: var(--text-color-primary);
+            border-color: var(--text-color-primary);
+        }
+        .visible {
+            display: block;
+        }
     }
 </style>
