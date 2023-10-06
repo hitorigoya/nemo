@@ -76,6 +76,17 @@
     </form>
 </div>
 
+<div class="help">
+    <div class="help_title">オンラインメモ帳アプリ - Nemo</div>
+    <ul>
+        <li>このアプリはデモアプリです。個人情報を入力しないで下さい</li>
+        <li>
+            サインアップの際に実在するメールアドレスを入力する必要はありません。メールアドレスの認証は行っておりません
+        </li>
+        <li>24時間で自動的にログアウトされます</li>
+    </ul>
+</div>
+
 <style>
     .form_container {
         padding: 16px;
@@ -139,6 +150,18 @@
     .visible {
         display: block;
     }
+    .help {
+        border: 1px solid var(--text-color-primary);
+        border-radius: 4px;
+        padding: 8px 16px;
+        margin-top: 64px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #000;
+    }
+    .help_title {
+        text-align: center;
+    }
     @media (min-width: 768px) {
         .form_container {
             max-width: 520px;
@@ -146,6 +169,10 @@
             border-radius: 8px;
             padding: 32px;
             background-color: var(--bg-color-secondary);
+        }
+        .help {
+            max-width: 520px;
+            margin: 64px auto;
         }
     }
 </style>
