@@ -76,11 +76,7 @@
 
 <style>
     .form_container {
-        max-width: 520px;
-        margin: 32px auto;
-        border-radius: 8px;
-        padding: 32px;
-        background-color: var(--bg-color-secondary);
+        padding: 16px;
     }
     h2 {
         text-align: center;
@@ -140,5 +136,14 @@
     }
     .visible {
         display: block;
+    }
+    @media (min-width: 768px) {
+        .form_container {
+            max-width: 520px;
+            margin: 32px auto;
+            border-radius: 8px;
+            padding: 32px;
+            background-color: var(--bg-color-secondary);
+        }
     }
 </style>

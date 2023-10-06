@@ -35,6 +35,24 @@
         }
     }
 
+    async function deleteContent() {
+        const index = $contents.findIndex(
+            (obj) => obj.id === $currentContentID
+        );
+        if (index === -1) return;
+
+        try {
+            const res = await axios.delete(
+                `/api/content/${$contents[index].id}`
+            );
+            console.log(res.data);
+            $currentContentID = "";
+            getContents();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     function handleInput() {
         const index = getCurrentIndex();
         if (index === -1) return;
@@ -69,9 +87,27 @@
 
 <div class="container">
     <div class="control" class:control_visible={$currentContentID !== ""}>
+        <button
+            class="return_to_contents_list"
+            on:click={() => ($currentContentID = "")}
+        >
+            <svg
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M7.5 15L0 7.5L7.5 0L8.48438 0.984375L2.67187 6.79688H15V8.20312H2.67187L8.48438 14.0156L7.5 15Z"
+                    fill="currentColor"
+                />
+            </svg>
+        </button>
         <button on:click={updateContent}>Save</button><button
             on:click={downloadFile}>Download</button
         >
+        <button on:click={deleteContent}>Delete</button>
     </div>
 
     {#each $contents as content}
@@ -100,6 +136,7 @@
     .container {
         display: grid;
         grid-template-rows: auto 1fr;
+        padding: 16px;
     }
     .content {
         display: none;
@@ -145,8 +182,26 @@
         color: var(--text-color-secondary);
         background-color: var(--bg-color-secondary);
     }
-    button:hover {
-        cursor: pointer;
-        color: var(--text-color-primary);
+    .return_to_contents_list {
+        display: flex;
+    }
+
+    @media (min-width: 768px) {
+        .container {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            padding: 0;
+        }
+        .content_visible {
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+        button:hover {
+            cursor: pointer;
+            color: var(--text-color-primary);
+        }
+        .return_to_contents_list {
+            display: none;
+        }
     }
 </style>
