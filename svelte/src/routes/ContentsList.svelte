@@ -9,7 +9,6 @@
             console.log(res.data);
         } catch (err) {
             console.log(err);
-            window.location.replace("/login/");
         }
     }
 
@@ -24,7 +23,7 @@
     }
 </script>
 
-<ul class:visible={$currentContentID === ""}>
+<ul class:hide_contents_list={$currentContentID !== ""}>
     {#each $contents as content}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li
@@ -40,7 +39,6 @@
 
 <style>
     ul {
-        display: none;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -55,12 +53,7 @@
     .modified::before {
         content: "* ";
     }
-    .visible {
-        display: block;
-    }
-    @media (min-width: 768px) {
-        ul {
-            display: none !important;
-        }
+    .hide_contents_list {
+        display: none;
     }
 </style>
