@@ -62,57 +62,51 @@
 
 <style>
     ul {
-        display: none;
+        list-style: none;
+        position: sticky;
+        top: 64px;
+        height: calc(100vh - 64px);
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: var(--bg-contents-list);
     }
-    @media (min-width: 768px) {
-        ul {
-            display: block;
-            list-style: none;
-            position: sticky;
-            top: 64px;
-            height: calc(100vh - 64px);
-            margin: 0;
-            padding: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: var(--bg-contents-list);
-        }
-        ul li {
-            font-size: 14px;
-            padding: 6px 16px;
-            white-space: nowrap;
-            position: relative;
-            color: var(--text-contents-list);
-        }
-        ul li:hover {
-            cursor: pointer;
-            background-color: var(--bg-contents-list-highlight);
-        }
-        .current_content {
-            color: var(--text-contents-list-active) !important;
-            background-color: var(--bg-contents-list-highlight);
-        }
-        .modified::before {
-            content: "* ";
-        }
-        .delete_btn {
-            display: none;
-            position: absolute;
-            top: 10%;
-            bottom: 10%;
-            right: 0;
-            padding: 0 4px;
-            border: 1px solid var(--text-color-secondary);
-            border-radius: 4px;
-            color: var(--text-color-secondary);
-            background-color: var(--bg-color-secondary);
-        }
-        .delete_btn:hover {
-            color: var(--text-color-primary);
-            border-color: var(--text-color-primary);
-        }
-        .visible {
-            display: block;
-        }
+    ul li {
+        font-size: 14px;
+        padding: 6px 16px;
+        white-space: nowrap;
+        position: relative;
+        color: var(--text-contents-list);
+    }
+    ul li:hover {
+        cursor: pointer;
+        background-color: var(--bg-contents-list-highlight);
+    }
+    .current_content {
+        color: var(--text-contents-list-active) !important;
+        background-color: var(--bg-contents-list-highlight);
+    }
+    .modified::before {
+        content: "* ";
+    }
+    .delete_btn {
+        display: none;
+        position: absolute;
+        top: 10%;
+        bottom: 10%;
+        right: 0;
+        padding: 0 4px;
+        border: 1px solid var(--text-color-secondary);
+        border-radius: 4px;
+        color: var(--text-color-secondary);
+        background-color: var(--bg-color-secondary);
+    }
+    .delete_btn:hover {
+        color: var(--text-color-primary);
+        border-color: var(--text-color-primary);
+    }
+    .visible {
+        display: block;
     }
 </style>

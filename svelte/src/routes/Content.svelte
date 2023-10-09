@@ -1,11 +1,6 @@
 <script>
     import axios from "axios";
-    import { onMount } from "svelte";
     import { contents, currentContentID } from "./store.js";
-
-    onMount(() => {
-        getContents();
-    });
 
     async function getContents() {
         try {
@@ -14,7 +9,6 @@
             console.log(res.data);
         } catch (err) {
             console.log(err);
-            window.location.replace("/login/");
         }
     }
 
@@ -85,8 +79,8 @@
     }
 </script>
 
-<div class="container">
-    <div class="control" class:control_visible={$currentContentID !== ""}>
+<div class="container" class:hide_container={$currentContentID === ""}>
+    <div class="control" class:hide_control={$currentContentID === ""}>
         <button
             class="return_to_contents_list"
             on:click={() => ($currentContentID = "")}
@@ -104,10 +98,11 @@
                 />
             </svg>
         </button>
-        <button on:click={updateContent}>Save</button><button
-            on:click={downloadFile}>Download</button
-        >
-        <button on:click={deleteContent}>Delete</button>
+        <div class="control_btn_container">
+            <button on:click={updateContent}>Save</button>
+            <button on:click={downloadFile}>Download</button>
+            <button on:click={deleteContent}>Delete</button>
+        </div>
     </div>
 
     {#each $contents as content}
@@ -135,9 +130,39 @@
 
 <style>
     .container {
+        height: calc(100vh - 64px);
         display: grid;
         grid-template-rows: auto 1fr;
+    }
+    .hide_container {
+        display: none;
+    }
+    .control {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
         padding: 16px;
+    }
+    .control_btn_container {
+        display: flex;
+        gap: 16px;
+    }
+    .hide_control {
+        display: none;
+    }
+    button {
+        border: none;
+        border-radius: 4px;
+        padding: 4px 8px;
+        color: var(--text-color-secondary);
+        background-color: var(--bg-color-secondary);
+    }
+    button:hover {
+        cursor: pointer;
+        color: var(--text-color-primary);
+    }
+    .return_to_contents_list {
+        display: flex;
     }
     .content {
         display: none;
@@ -160,50 +185,12 @@
         outline: none;
     }
     .title_field {
-        padding: 32px 0;
-        font-size: 32px;
+        padding: 24px 16px;
+        font-size: 24px;
         color: var(--text-content-title);
     }
     .content_field {
-        padding-top: 0;
+        padding: 16px;
         padding-bottom: 256px;
-        padding-left: 0;
-    }
-    .control {
-        display: none;
-    }
-    .control_visible {
-        display: flex;
-        gap: 16px;
-        padding-top: 16px;
-    }
-    button {
-        border: none;
-        border-radius: 4px;
-        padding: 4px 8px;
-        color: var(--text-color-secondary);
-        background-color: var(--bg-color-secondary);
-    }
-    .return_to_contents_list {
-        display: flex;
-    }
-
-    @media (min-width: 768px) {
-        .container {
-            display: grid;
-            grid-template-rows: auto 1fr;
-            padding: 0;
-        }
-        .content_visible {
-            display: grid;
-            grid-template-rows: auto 1fr;
-        }
-        button:hover {
-            cursor: pointer;
-            color: var(--text-color-primary);
-        }
-        .return_to_contents_list {
-            display: none;
-        }
     }
 </style>
