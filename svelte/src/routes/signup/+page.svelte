@@ -51,7 +51,8 @@
 </svelte:head>
 
 <div class="form_container">
-    <h2>サインアップ</h2>
+    <div class="app_title">オンラインメモ帳アプリ - Nemo -</div>
+    <div class="form_title">サインアップ</div>
     <div class="signup">登録済みの場合は<a href="/login/">ログイン</a></div>
     <form on:submit|preventDefault={handleSubmit}>
         <label
@@ -79,7 +80,6 @@
 </div>
 
 <div class="help">
-    <div class="help_title">オンラインメモ帳アプリ - Nemo</div>
     <ul>
         <li>このアプリはデモアプリです。個人情報を入力しないで下さい</li>
         <li>
@@ -93,9 +93,15 @@
     .form_container {
         padding: 16px;
     }
-    h2 {
+    .app_title {
         text-align: center;
-        margin-bottom: 4px;
+    }
+    .form_title {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 32px;
+        margin-bottom: 8px;
         color: var(--text-content-title);
     }
     .signup {
@@ -162,9 +168,6 @@
         color: #fff;
         background-color: #000;
     }
-    .help_title {
-        text-align: center;
-    }
     @media (min-width: 768px) {
         .form_container {
             max-width: 520px;
@@ -172,6 +175,9 @@
             border-radius: 8px;
             padding: 32px;
             background-color: #2b2d31;
+        }
+        .form_title {
+            font-size: 24px;
         }
         .help {
             max-width: 520px;
