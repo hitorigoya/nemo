@@ -42,6 +42,8 @@
         background-color: var(--bg-color-secondary);
     }
     #help {
+        display: none;
+
         border: 1px solid var(--text-color-primary);
         border-radius: 4px;
         padding: 8px 16px;
@@ -50,6 +52,8 @@
         text-align: center;
     }
     .help_btn {
+        display: none;
+
         border: none;
         padding: 8px 12px;
         border-radius: 50%;
