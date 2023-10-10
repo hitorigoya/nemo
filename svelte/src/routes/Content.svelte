@@ -80,32 +80,37 @@
 </script>
 
 <div class="container" class:hide_container={$currentContentID === ""}>
-    <div class="control" class:hide_control={$currentContentID === ""}>
-        <button
-            class="return_to_contents_list"
-            on:click={() => ($currentContentID = "")}
-        >
-            <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M7.5 15L0 7.5L7.5 0L8.48438 0.984375L2.67187 6.79688H15V8.20312H2.67187L8.48438 14.0156L7.5 15Z"
-                    fill="currentColor"
-                />
-            </svg>
-        </button>
-        <div class="control_btn_container">
-            <button on:click={updateContent}>Save</button>
-            <button on:click={downloadFile}>Download</button>
-            <button on:click={deleteContent}>Delete</button>
-        </div>
-    </div>
-
     {#each $contents as content}
+        <div
+            class="control"
+            class:hide_control={$currentContentID !== content.id}
+        >
+            <button
+                class="return_to_contents_list"
+                on:click={() => ($currentContentID = "")}
+            >
+                <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M7.5 15L0 7.5L7.5 0L8.48438 0.984375L2.67187 6.79688H15V8.20312H2.67187L8.48438 14.0156L7.5 15Z"
+                        fill="currentColor"
+                    />
+                </svg>
+            </button>
+            <div class="control_btn_container">
+                <button
+                    class:modified={content.modified}
+                    on:click={updateContent}>Save</button
+                >
+                <button on:click={downloadFile}>Download</button>
+                <button on:click={deleteContent}>Delete</button>
+            </div>
+        </div>
         <div
             class="content"
             class:content_visible={$currentContentID === content.id}
@@ -164,6 +169,9 @@
     .return_to_contents_list {
         display: flex;
     }
+    .modified {
+        color: #2dc770;
+    }
     .content {
         display: none;
     }
@@ -192,5 +200,10 @@
     .content_field {
         padding: 16px;
         padding-bottom: 256px;
+    }
+    @media (min-width: 768px) {
+        .return_to_contents_list {
+            display: none;
+        }
     }
 </style>
