@@ -90,17 +90,15 @@
                 on:click={() => ($currentContentID = "")}
             >
                 <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 15 15"
-                    fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M7.5 15L0 7.5L7.5 0L8.48438 0.984375L2.67187 6.79688H15V8.20312H2.67187L8.48438 14.0156L7.5 15Z"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    ><path
+                        d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"
                         fill="currentColor"
-                    />
-                </svg>
+                    /></svg
+                >
             </button>
             <div class="control_btn_container">
                 <button
@@ -151,6 +149,9 @@
     .control_btn_container {
         display: flex;
         gap: 16px;
+    }
+    .control_btn_container button {
+        font-size: 15px;
     }
     .hide_control {
         display: none;
