@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import axios from "axios";
     import validator from "validator";
 
@@ -7,6 +8,7 @@
     let emailWarn = false;
     let passwordWarn = false;
     let displayLoginErrorMsg = false;
+    let inputElement;
 
     function validateEmail() {
         if (validator.isEmail(email)) {
@@ -42,6 +44,10 @@
             }
         }
     }
+
+    onMount(() => {
+        inputElement.focus();
+    });
 </script>
 
 <svelte:head>
@@ -61,6 +67,7 @@
                     >メールアドレス<span class="required_mail">*</span></span
                 >
                 <input
+                    bind:this={inputElement}
                     bind:value={email}
                     on:input={validateEmail}
                     class:validator_warn={emailWarn}
