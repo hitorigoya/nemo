@@ -182,7 +182,6 @@
         border: 1px solid var(--text-color-primary);
         border-radius: 4px;
         padding: 8px 16px;
-        margin-top: 64px;
         font-size: 14px;
         color: #fff;
         background-color: #000;
@@ -190,12 +189,14 @@
     @media (min-width: 768px) {
         .container {
             min-height: 100vh;
-            padding-top: 32px;
-            background-image: linear-gradient(tomato, mediumblue);
+            background-image: url("/sunset-3563482_1920.jpg");
+            display: grid;
+            justify-content: center;
+            align-content: center;
+            gap: 32px;
         }
         .form_container {
             max-width: 520px;
-            margin: auto;
             border-radius: 8px;
             padding: 32px;
             background-color: var(--bg-color-primary);
@@ -208,7 +209,6 @@
         }
         .help {
             max-width: 520px;
-            margin: 64px auto;
         }
     }
 </style>
