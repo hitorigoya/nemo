@@ -48,51 +48,66 @@
     <title>ログイン | Nemo</title>
 </svelte:head>
 
-<div class="form_container">
-    <div class="app_title">オンラインメモ帳アプリ - Nemo -</div>
-    <div class="form_title">ログイン</div>
-    <div class="signup">未登録の場合は<a href="/signup/">サインアップ</a></div>
-    <form on:submit|preventDefault={handleSubmit}>
-        <label
-            ><span class="label_text">メールアドレス</span>
-            <input
-                bind:value={email}
-                on:input={validateEmail}
-                class:validator_warn={emailWarn}
-            />
-        </label>
-        <label
-            ><span class="label_text">パスワード（半角英数字8文字以上）</span>
-            <input
-                bind:value={password}
-                on:input={validatePassword}
-                type="password"
-                class:validator_warn={passwordWarn}
-            />
-        </label>
-        <button>ログイン</button>
-        <div class="login_error_msg" class:visible={displayLoginErrorMsg}>
-            メールアドレスもしくはパスワードが違います
+<div class="container">
+    <div class="form_container">
+        <div class="app_title">オンラインメモ帳アプリ - Nemo -</div>
+        <div class="form_title">ログイン</div>
+        <div class="login">
+            未登録の場合は<a href="/signup/">サインアップ</a>
         </div>
-    </form>
-</div>
+        <form on:submit|preventDefault={handleSubmit}>
+            <label
+                ><span class="label_text"
+                    >メールアドレス<span class="required_mail">*</span></span
+                >
+                <input
+                    bind:value={email}
+                    on:input={validateEmail}
+                    class:validator_warn={emailWarn}
+                />
+            </label>
+            <label
+                ><span class="label_text"
+                    >パスワード（半角英数字8文字以上）<span class="required"
+                        >*</span
+                    ></span
+                >
+                <input
+                    bind:value={password}
+                    on:input={validatePassword}
+                    type="password"
+                    class:validator_warn={passwordWarn}
+                />
+            </label>
+            <button>ログイン</button>
+            <div class="login_error_msg" class:visible={displayLoginErrorMsg}>
+                メールアドレスもしくはパスワードが違います
+            </div>
+        </form>
+    </div>
 
-<div class="help">
-    <ul>
-        <li>このアプリはデモアプリです。個人情報を入力しないで下さい</li>
-        <li>
-            サインアップの際に実在するメールアドレスを入力する必要はありません。メールアドレスの認証は行っておりません
-        </li>
-        <li>24時間で自動的にログアウトされます</li>
-    </ul>
+    <div class="help">
+        <ul>
+            <li>このアプリはデモアプリです。個人情報を入力しないで下さい</li>
+            <li>
+                サインアップの際に実在するメールアドレスを入力する必要はありません。メールアドレスの認証は行っておりません
+            </li>
+            <li>24時間で自動的にログアウトされます</li>
+        </ul>
+    </div>
 </div>
 
 <style>
+    .container {
+        min-height: 100vh;
+    }
     .form_container {
         padding: 16px;
     }
     .app_title {
         text-align: center;
+        font-weight: bold;
+        padding-top: 16px;
     }
     .form_title {
         text-align: center;
@@ -102,19 +117,25 @@
         margin-bottom: 8px;
         color: var(--text-content-title);
     }
-    .signup {
+    .login {
         text-align: center;
         font-size: 14px;
         margin-bottom: 24px;
-    }
-    .signup a {
-        font-weight: bold;
+        color: var(--text-color-secondary);
     }
     .label_text {
         display: inline-block;
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: bold;
         margin-bottom: 4px;
         color: #bfbfbf;
+    }
+    .required_mail {
+        color: tomato;
+        padding-left: 4px;
+    }
+    .required {
+        color: tomato;
     }
     input {
         font-size: 16px;
@@ -131,7 +152,7 @@
         outline: none;
     }
     button {
-        font-size: 14px;
+        font-size: 16px;
         text-align: center;
         width: 100%;
         padding: 12px 16px;
@@ -167,15 +188,23 @@
         background-color: #000;
     }
     @media (min-width: 768px) {
+        .container {
+            min-height: 100vh;
+            padding-top: 32px;
+            background-image: linear-gradient(tomato, mediumblue);
+        }
         .form_container {
             max-width: 520px;
-            margin: 32px auto;
+            margin: auto;
             border-radius: 8px;
             padding: 32px;
-            background-color: #2b2d31;
+            background-color: var(--bg-color-primary);
+        }
+        .app_title {
+            font-size: 18px;
         }
         .form_title {
-            font-size: 24px;
+            font-size: 20px;
         }
         .help {
             max-width: 520px;
