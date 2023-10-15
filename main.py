@@ -80,9 +80,10 @@ def get_current_user(access_token: str = Cookie()):
 def get_contents(access_token: str = Cookie()):
     with Session(engine) as db:
         user_id = get_user_id_from_token(access_token)
-        db_contents = db.query(ContentTable).filter_by(user_id=user_id).all()
+        db_user = db.query(UserTable).filter_by(id=user_id).one()
+        contents = db_user.contents
 
-    return db_contents
+    return contents
 
 
 @api.post("/content/", response_model=Content)
