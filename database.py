@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import mapped_column, relationship
 from sqlalchemy import ForeignKey
+from typing import List
 
 
 engine = create_engine(
@@ -19,6 +20,7 @@ class UserTable(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True)
     hashed_password: Mapped[str]
+    contents: Mapped[List["ContentTable"]] = relationship()
 
 
 class ContentTable(Base):
