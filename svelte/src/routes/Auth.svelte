@@ -138,16 +138,14 @@
 <style>
     .container {
         min-height: 100vh;
-        background-image: url("/sunset-3563482_1920.jpg");
+        background-image: url("/camp-4363073_1920.png");
         display: grid;
         justify-content: center;
-        align-content: center;
         gap: 32px;
     }
     .form_container {
         padding: 16px;
         background-color: var(--bg-color-primary);
-        opacity: 0.94;
     }
     .app_title {
         text-align: center;
@@ -232,6 +230,9 @@
         background-color: #000;
     }
     @media (min-width: 768px) {
+        .container {
+            align-content: center;
+        }
         .form_container {
             max-width: 520px;
             border-radius: 8px;
